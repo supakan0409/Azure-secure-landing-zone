@@ -1,10 +1,3 @@
-// ---------------------------------------------------------
-// Enterprise Secure Landing Zone - Infrastructure as Code
-// Author: Computer Engineering Student, RSU
-// Description: Provisions a secure network foundation with centralized logging, 
-//              traffic segmentation, and identity-based compute resources.
-// ---------------------------------------------------------
-
 // 1. Parameters
 // ---------------------------------------------------------
 
