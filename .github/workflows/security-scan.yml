@@ -1,0 +1,44 @@
+name: Secure Landing Zone Pipeline
+
+# ทำงานเมื่อมีการ Push Code เข้ามาที่ Branch main
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  # Job 1: ตรวจสอบความปลอดภัย (Security Audit)
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install Checkov
+        run: pip install checkov
+
+      - name: Run Checkov Scan (IaC Security)
+        # สั่ง Scan ไฟล์ bicep ทั้งหมดใน folder
+        # --soft-fail: เจอ error แล้วเตือนแต่ไม่หยุดทำงาน (เพื่อให้เราเข้าไปดูผลลัพธ์ได้)
+        run: checkov -d . --framework bicep --soft-fail 
+
+  # Job 2: ตรวจสอบความถูกต้องของ Code (Lint & Build)
+  bicep-build:
+    runs-on: ubuntu-latest
+    needs: security-scan # ต้องผ่าน Scan ก่อนถึงจะทำขั้นตอนนี้
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Azure CLI
+        run: |
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+      - name: Bicep Build (Validation)
+        # ลอง Build ดู ถ้า Syntax ผิดมันจะฟ้อง error ตรงนี้
+        run: az bicep build --file main.bicep
