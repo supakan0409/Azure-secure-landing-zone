@@ -1,4 +1,5 @@
 # Azure Infrastructure Security: Cloud Architecture Study
+[![Secure Landing Zone Pipeline](https://github.com/supakan0409/Azure-secure-landing-zone/actions/workflows/security-scan.yml/badge.svg)](https://github.com/supakan0409/Azure-secure-landing-zone/actions/workflows/security-scan.yml)
 
 This repository represents a **Proof of Concept (PoC)** for designing a secure cloud infrastructure. The primary goal is to gain hands-on experience with **Infrastructure as Code (IaC)** using **Azure Bicep**, while understanding the fundamental components of a secure and scalable cloud environment.
 
