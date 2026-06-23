@@ -10,7 +10,7 @@ It serves as a study on how to harden a basic landing zone against common attack
 ## 🛡️ Key Features
 ### 1. Infrastructure as Code (Bicep)
 * **Modular Design:** Resources are defined in Azure Bicep for repeatability and consistency.
-* **Visibility First:** Deploys **Azure Log Analytics Workspace** as the foundation for centralized logging.
+* **Visibility First:** Deploys **Azure  Analytics Workspace** as the foundation for centralized logging.
 * **Network Security:** Implements **Virtual Network (VNet)** segmentation and **Network Security Groups (NSG)** with enabled diagnostic logs.
 
 ### 2. Identity & Zero Trust
@@ -22,42 +22,10 @@ It serves as a study on how to harden a basic landing zone against common attack
 * **Static Analysis (SAST):** Integrates **Checkov** to automatically scan Bicep files for security violations (e.g., unencrypted disks, open ports) on every push.
 
 ## 🧩 Architecture & Security Boundaries
+<img width="1006" height="1080" alt="Image" src="https://github.com/user-attachments/assets/e4377231-966b-4324-a624-59ab7bb0e52c" />
 
-```mermaid
-graph LR
-    subgraph Untrusted ["External / Untrusted Zone"]
-        Attacker[("External Actor")]
-    end
+<img width="891" height="1262" alt="Image" src="https://github.com/user-attachments/assets/d6eb87b8-389e-47cd-a33c-ac0ac91a13a9" />
 
-    subgraph Azure ["Azure Trusted Zone"]
-        style Azure fill:#f9f9f9,stroke:#333,stroke-width:2px
-        
-        subgraph Monitoring ["Detection Plane"]
-            LAW[("Log Analytics Workspace")]
-        end
-
-        subgraph Network ["Virtual Network"]
-            style Network fill:#e6f2ff,stroke:#0072C6
-            
-            subgraph Backend ["Isolated Backend Subnet"]
-                style Backend fill:#fff,stroke:#bf0000,stroke-width:2px,stroke-dasharray: 5 5
-                
-                VM[("Compute Resource<br/>(No Public IP)")]
-                Identity[["Managed Identity"]]
-                
-                VM -.-> Identity
-            end
-        end
-    end
-
-    %% Connections
-    Attacker -- "Blocked" --> VM
-    VM -- "Audit Logs" --> LAW
-    Identity -- "Auth" --> VM
-
-    %% Pulling the layout wide
-    Monitoring ~~~ Network
-```
 > [!IMPORTANT]
 > **Key Posture:** This architecture enforces a "Deny-by-Default" stance. The Backend Subnet is completely isolated from direct internet ingress.
 
